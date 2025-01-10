@@ -1,5 +1,32 @@
 from django.db import models
 from django.contrib.auth.hashers import check_password
+from django.contrib.auth.models import AbstractUser
+
+
+class CustomUser(AbstractUser):
+    class Meta:
+        managed = False
+        db_table = "Users"
+
+    UserId = models.AutoField(primary_key=True)
+    FullName = models.CharField(max_length=255)
+    Cedula = models.CharField(max_length=11)
+    Phone = models.CharField(max_length=12, null=True, blank=True)
+    Active = models.BooleanField(null=True, blank=True)
+    RNC = models.CharField(max_length=20, null=True, blank=True)
+    ComercialCompanyName = models.CharField(max_length=255, null=True, blank=True)
+    CompanyName = models.CharField(max_length=255, null=True, blank=True)
+    IsMaster = models.BooleanField(null=True, blank=True)
+
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["FullName", "Cedula", "email"]
+
+    def __str__(self):
+        return self.username
+
+    # Es necesario definir este método para que funcione la autenticación
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
 
 
 class User(models.Model):

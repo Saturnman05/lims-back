@@ -38,3 +38,5 @@ docs/_build/
 # Ignorar archivos específicos del sistema operativo
 Thumbs.db
 .DS_Store
+
+api/migrations/*
