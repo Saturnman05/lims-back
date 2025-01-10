@@ -1,0 +1,40 @@
+# Archivos de bytecode
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Archivos temporales
+*.log
+local_settings.py
+db.sqlite3
+
+# Entorno virtual
+.venv/
+env/
+.env
+
+# Archivos de configuración del IDE
+.idea/
+*.iml
+.vscode/
+
+# Archivos estáticos generados
+staticfiles/
+
+# Archivos de medios subidos por el usuario
+media/
+
+# Archivos de caché
+.cache
+
+# Archivos de cobertura de código
+.coverage
+htmlcov/
+
+# Archivos de documentación generados
+docs/_build/
+
+# Ignorar archivos específicos del sistema operativo
+Thumbs.db
+.DS_Store
