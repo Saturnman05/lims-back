@@ -7,8 +7,8 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm):
         model = CustomUser
         fields = UserCreationForm.Meta.fields + (
-            "FullName",
-            "Cedula",
+            "full_name",
+            "cedula",
         )
 
 
