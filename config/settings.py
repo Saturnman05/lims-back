@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "corsheaders",
     # local
     "api.apps.ApiConfig",
+    "api.allergens",
 ]
 
 MIDDLEWARE = [

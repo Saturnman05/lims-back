@@ -40,3 +40,4 @@ Thumbs.db
 .DS_Store
 
 api/migrations/*
+api/allergens/migrations/*
