@@ -11,3 +11,16 @@ class Allergens(models.Model):
 
     def __str__(self):
         return self.allergen_name
+
+
+class AllergenSample(models.Model):
+    class Meta:
+        managed = False
+        db_table = "AllergenSample"
+
+    Allergen = models.ForeignKey(
+        "allergens.Allergens", on_delete=models.CASCADE, db_column="AllergenId"
+    )
+    Sample = models.ForeignKey(
+        "samples.Sample", on_delete=models.CASCADE, db_column="SampleId"
+    )

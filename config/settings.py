@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "api.allergens",
     "api.categorys",
     "api.ingredients",
+    "api.samples",
 ]
 
 MIDDLEWARE = [

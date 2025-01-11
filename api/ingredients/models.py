@@ -11,3 +11,16 @@ class Ingredient(models.Model):
 
     def __str__(self):
         return self.ingredient_name
+
+
+class SampleIngredient(models.Model):
+    class Meta:
+        managed = False
+        db_table = "SampleIngredient"
+
+    Ingredient = models.ForeignKey(
+        "ingredients.Ingredient", on_delete=models.CASCADE, db_column="IngredientId"
+    )
+    Sample = models.ForeignKey(
+        "samples.Sample", on_delete=models.CASCADE, db_column="SampleId"
+    )

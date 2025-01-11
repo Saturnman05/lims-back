@@ -11,3 +11,16 @@ class Category(models.Model):
 
     def __str__(self):
         return self.category_name
+
+
+class CategorySample(models.Model):
+    class Meta:
+        managed = False
+        db_table = "CategorySample"
+
+    Category = models.ForeignKey(
+        "categorys.Category", on_delete=models.CASCADE, db_column="CategoryId"
+    )
+    Sample = models.ForeignKey(
+        "samples.Sample", on_delete=models.CASCADE, db_column="SampleId"
+    )
