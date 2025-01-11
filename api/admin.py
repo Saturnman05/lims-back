@@ -6,6 +6,8 @@ from .models import CustomUser
 
 from .allergens.models import Allergens
 
+from .categorys.models import Category
+
 
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
@@ -23,3 +25,4 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Allergens)
+admin.site.register(Category)

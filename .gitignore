@@ -41,3 +41,4 @@ Thumbs.db
 
 api/migrations/*
 api/allergens/migrations/*
+api/categorys/migrations/*
