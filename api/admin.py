@@ -5,8 +5,8 @@ from .forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import CustomUser
 
 from .allergens.models import Allergens
-
 from .categorys.models import Category
+from .ingredients.models import Ingredient
 
 
 class CustomUserAdmin(UserAdmin):
@@ -24,5 +24,7 @@ class CustomUserAdmin(UserAdmin):
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
+
 admin.site.register(Allergens)
 admin.site.register(Category)
+admin.site.register(Ingredient)
