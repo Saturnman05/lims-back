@@ -22,6 +22,7 @@ class Sample(models.Model):
     user_id = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, db_column="UserId"
     )
+    is_request = models.BooleanField(default=True, db_column="IsRequest")
 
     # Relaciones muchos a muchos
     allergens = models.ManyToManyField(

@@ -6,3 +6,8 @@ from .models import Sample
 class SampleListCreate(generics.ListCreateAPIView):
     queryset = Sample.objects.all()
     serializer_class = SampleSerializer
+
+
+class SampleDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Sample.objects.all()
+    serializer_class = SampleSerializer
