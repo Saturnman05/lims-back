@@ -76,72 +76,62 @@ class SampleSerializer(serializers.ModelSerializer):
 
         return sample
 
-    def update(self, validated_data):
+    def update(self, instance, validated_data):
         # Obtener los datos actuales
-        before_sample = Sample.objects.get(pk=validated_data["sample_id"])
-        before_allergens_data = before_sample.allergens
-        before_categorys_data = before_sample.categorys
-        before_ingredients_data = before_sample.ingredients
+        before_allergens_data = instance.allergens.all()
+        before_categorys_data = instance.categorys.all()
+        before_ingredients_data = instance.ingredients.all()
 
         # Datos para actualizar
         allergens_data = validated_data.pop("allergens")
         categorys_data = validated_data.pop("categorys")
         ingredients_data = validated_data.pop("ingredients")
 
-        sample = Sample.objects.update(**validated_data)
+        # Actualizar el Sample
+        instance = super().update(instance, validated_data)
 
         # UPDATE allergens
-        before_allergen_ids = set(
-            before_allergens_data.values_list("allergen_id", flat=True)
+        self.update_relations(
+            instance,
+            before_allergens_data,
+            allergens_data,
+            "allergen_id",
+            AllergenSample,
         )
-        allergen_ids = set([allergen["allergen_id"] for allergen in allergens_data])
-        new_allergen_ids = []
-        for id in before_allergen_ids:
-            if not id in allergen_ids:
-                AllergenSample.objects.filter(
-                    Sample=before_sample, Allergen=id
-                ).delete()
-            else:
-                new_allergen_ids.append(id)
-
-        for id in set(allergen_ids + new_allergen_ids):
-            AllergenSample.objects.create(Sample=sample, Allergen=id)
 
         # UPDATE categorys
-        before_category_ids = set(
-            before_categorys_data.values_list("category_id", flat=True)
+        self.update_relations(
+            instance,
+            before_categorys_data,
+            categorys_data,
+            "category_id",
+            CategorySample,
         )
-        category_ids = set([category["category_id"] for category in categorys_data])
-        new_category_ids = []
-        for id in before_category_ids:
-            if not id in category_ids:
-                CategorySample.objects.filter(
-                    Sample=before_sample, Category=id
-                ).delete()
-            else:
-                new_category_ids.append(id)
 
-        for id in set(category_ids + new_category_ids):
-            CategorySample.objects.create(Sample=sample, Category=id)
+        # UPDATE ingredients
+        self.update_relations(
+            instance,
+            before_ingredients_data,
+            ingredients_data,
+            "ingredient_id",
+            SampleIngredient,
+        )
 
-        # TODO: UPDATE ingredients
-        before_ingredient_ids = set(
-            before_ingredients_data.values_list("ingredient_id", flat=True)
-        )
-        ingredient_ids = set(
-            [ingredient["ingredient_id"] for ingredient in ingredients_data]
-        )
-        new_ingredient_ids = []
-        for id in before_ingredient_ids:
-            if not id in ingredient_ids:
-                SampleIngredient.objects.filter(
-                    Sample=before_sample, Ingredient=id
-                ).delete()
-            else:
-                new_ingredient_ids.append(id)
-        for ingredient_data in ingredients_data:
-            SampleIngredient.objects.create(
-                Sample=sample, Ingredient=ingredient_data["ingredient_id"]
+        return instance
+
+    def update_relations(
+        self, instance, before_relaions_data, relations_data, id_field, relation_model
+    ):
+        before_relation_ids = set(before_relaions_data.values_list(id_field, flat=True))
+        relation_ids = set([relation[id_field] for relation in relations_data])
+
+        # Eliminar relaciones que ya no existen (corregido)
+        for relation_id in before_relation_ids - relation_ids:
+            relation_model.objects.filter(
+                Sample=instance, **{id_field.capitalize(): relation_id}
+            ).delete()
+
+        for relation_id in relation_ids - before_relation_ids:
+            relation_model.objects.create(
+                Sample=instance, **{id_field.capitalize(): relation_id.pk}
             )
-
-        return sample
