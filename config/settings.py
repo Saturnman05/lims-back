@@ -34,11 +34,12 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "corsheaders",
+    "nested_admin",
     # local
     "api.apps.ApiConfig",
-    "api.allergens",
-    "api.categorys",
-    "api.ingredients",
+    "api.samples.allergens",
+    "api.samples.categorys",
+    "api.samples.ingredients",
     "api.samples",
 ]
 

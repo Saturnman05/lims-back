@@ -1,11 +1,10 @@
 from rest_framework import serializers
+from .models import Category, CategorySample
 
-from .models import Allergens, AllergenSample
-
-from ..utils import convert_to_snake_case
+from ...utils import convert_to_snake_case
 
 
-class AllergenSerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     def to_internal_value(self, data):
         new_data = {}
         for key, value in data.items():
@@ -14,12 +13,12 @@ class AllergenSerializer(serializers.ModelSerializer):
         return super().to_internal_value(new_data)
 
     class Meta:
-        model = Allergens
+        model = Category
         fields = "__all__"
-        extra_kwargs = {"allergen_name": {"required": False}}
+        extra_kwargs = {"category_name": {"required": False}}
 
 
-class AllergenSampleSerializer(serializers.ModelSerializer):
+class CategorySampleSerializer(serializers.ModelSerializer):
     def to_internal_value(self, data):
         new_data = {}
         for key, value in data.items():
@@ -27,8 +26,8 @@ class AllergenSampleSerializer(serializers.ModelSerializer):
             new_data[new_key] = value
         return super().to_internal_value(new_data)
 
-    allergen_id = serializers.PrimaryKeyRelatedField(queryset=Allergens.objects.all())
+    category_id = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
 
     class Meta:
-        model = AllergenSample
-        fields = ["allergen_id"]
+        model = CategorySample
+        fields = ["category_id"]

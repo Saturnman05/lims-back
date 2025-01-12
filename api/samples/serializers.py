@@ -4,13 +4,13 @@ from rest_framework import serializers
 
 from .models import Sample
 
-from ..allergens.serializers import AllergenSampleSerializer
-from ..categorys.serializers import CategorySampleSerializer
-from ..ingredients.serializers import SampleIngredientSerializer
+from .allergens.serializers import AllergenSampleSerializer
+from .categorys.serializers import CategorySampleSerializer
+from .ingredients.serializers import SampleIngredientSerializer
 
-from ..allergens.models import AllergenSample
-from ..categorys.models import CategorySample
-from ..ingredients.models import SampleIngredient
+from .allergens.models import AllergenSample
+from .categorys.models import CategorySample
+from .ingredients.models import SampleIngredient
 
 from ..utils import convert_to_snake_case
 

@@ -1,10 +1,10 @@
 from rest_framework import serializers
-from .models import Category, CategorySample
+from .models import Ingredient, SampleIngredient
 
-from ..utils import convert_to_snake_case
+from ...utils import convert_to_snake_case
 
 
-class CategorySerializer(serializers.ModelSerializer):
+class IngredientSerializer(serializers.ModelSerializer):
     def to_internal_value(self, data):
         new_data = {}
         for key, value in data.items():
@@ -13,12 +13,12 @@ class CategorySerializer(serializers.ModelSerializer):
         return super().to_internal_value(new_data)
 
     class Meta:
-        model = Category
+        model = Ingredient
         fields = "__all__"
-        extra_kwargs = {"category_name": {"required": False}}
+        extra_kwargs = {"ingredient_name": {"required": False}}
 
 
-class CategorySampleSerializer(serializers.ModelSerializer):
+class SampleIngredientSerializer(serializers.ModelSerializer):
     def to_internal_value(self, data):
         new_data = {}
         for key, value in data.items():
@@ -26,8 +26,10 @@ class CategorySampleSerializer(serializers.ModelSerializer):
             new_data[new_key] = value
         return super().to_internal_value(new_data)
 
-    category_id = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all())
+    ingredient_id = serializers.PrimaryKeyRelatedField(
+        queryset=Ingredient.objects.all()
+    )
 
     class Meta:
-        model = CategorySample
-        fields = ["category_id"]
+        model = SampleIngredient
+        fields = ["ingredient_id"]
