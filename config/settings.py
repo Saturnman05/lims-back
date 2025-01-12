@@ -80,12 +80,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "mssql",
-        "NAME": "DBDesarrolloWeb",
-        "USER": "fmn",
-        "PASSWORD": "T8gM!s_z2",
-        "HOST": "DESKTOP-R6N7JNS\\SQLEXPRESS",
-        "PORT": "1433",
+        "ENGINE": os.getenv("ENGINE"),
+        "NAME": os.getenv("NAME"),
+        "USER": os.getenv("USER"),
+        "PASSWORD": os.getenv("PASSWORD"),
+        "HOST": os.getenv("HOST"),
+        "PORT": os.getenv("PORT"),
         "OPTIONS": {
             "driver": "ODBC Driver 17 for SQL Server",
             # "extra_params": "Authentication=ActiveDirectoryMsi;Encrypt=yes;TrustServerCertificate=yes",
