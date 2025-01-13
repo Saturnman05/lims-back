@@ -1,7 +1,7 @@
 from django.contrib import admin
 
+from .users.models import User
 from .users.admin import CustomUserAdmin
-from .models import CustomUser
 
 from .samples.allergens.models import Allergens
 from .samples.categorys.models import Category
@@ -10,7 +10,8 @@ from .samples.models import Sample
 from .samples.admin import SampleAdmin
 
 
-admin.site.register(CustomUser, CustomUserAdmin)
+# admin.site.register(CustomUser, CustomUserAdmin)\
+admin.site.register(User, CustomUserAdmin)
 
 admin.site.register(Allergens)
 admin.site.register(Category)

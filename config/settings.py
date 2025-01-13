@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "api.samples.categorys",
     "api.samples.ingredients",
     "api.samples",
+    "api.users",
 ]
 
 MIDDLEWARE = [
@@ -172,6 +173,6 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_LIFETIME_LATE_USER": timedelta(days=30),
 }
 
-AUTH_USER_MODEL = "api.CustomUser"
-
 CORS_ALLOWED_ORIGINS = ("http://localhost:5173",)
+
+AUTH_USER_MODEL = "users.User"
