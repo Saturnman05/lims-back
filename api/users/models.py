@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     class Meta:
-        managed = True
+        managed = False
         db_table = "Users"
 
     user_id = models.AutoField(primary_key=True, db_column="UserId")

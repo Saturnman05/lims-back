@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "corsheaders",
     "nested_admin",
+    "drf_spectacular",
     # local
     "api.apps.ApiConfig",
     "api.samples.allergens",
@@ -92,7 +93,23 @@ DATABASES = {
             # "extra_params": "Authentication=ActiveDirectoryMsi;Encrypt=yes;TrustServerCertificate=yes",
             "TrustServerCertificate": "yes",
         },
-    }
+        "TEST": {
+            "NAME": os.getenv("TEST_DB_NAME"),
+        },
+    },
+    "test": {
+        "ENGINE": os.getenv("ENGINE"),
+        "NAME": os.getenv("TEST_DB_NAME"),
+        "USER": os.getenv("USER"),
+        "PASSWORD": os.getenv("PASSWORD"),
+        "HOST": os.getenv("HOST"),
+        "PORT": os.getenv("PORT"),
+        "OPTIONS": {
+            "driver": "ODBC Driver 17 for SQL Server",
+            # "extra_params": "Authentication=ActiveDirectoryMsi;Encrypt=yes;TrustServerCertificate=yes",
+            "TrustServerCertificate": "yes",
+        },
+    },
 }
 
 
@@ -142,6 +159,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 SIMPLE_JWT = {
@@ -176,3 +194,9 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = ("http://localhost:5173",)
 
 AUTH_USER_MODEL = "users.User"
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "LIMS",
+    "DESCRIPTION": "LIMS backend",
+    "VERSION": "1.0.0",
+}
