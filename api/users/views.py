@@ -5,6 +5,8 @@ from rest_framework.response import Response
 
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
+from drf_spectacular.utils import extend_schema
+
 from .models import User
 from .serializers import UserSerializer
 from ..utils import convert_to_snake_case
@@ -20,6 +22,9 @@ class UserListView(ListAPIView):
     serializer_class = UserSerializer
 
 
+@extend_schema(
+    responses=UserSerializer,  # Especifica el serializer para las respuestas
+)
 class UserDetailView(GenericAPIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
