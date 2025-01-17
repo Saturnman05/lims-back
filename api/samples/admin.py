@@ -15,6 +15,7 @@ class SubcategorySampleInline(NestedStackedInline):
 
 
 class SampleAdmin(NestedModelAdmin):
+    pk_field = "sample_id"
     list_display = (
         "comercial_name",
         "product_brand",

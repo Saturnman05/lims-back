@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     # local
     "api.apps.ApiConfig",
     "api.samples.categorys",
+    "api.samples.subcategorys",
     "api.samples.files",
     "api.samples",
     "api.users",

@@ -1,4 +1,5 @@
 from django.db import models
+from ..models import Sample
 
 
 class Subcategory(models.Model):
@@ -19,8 +20,6 @@ class SubcategorySample(models.Model):
         db_table = "SubcategorySample"
 
     Subcategory = models.ForeignKey(
-        "subcategorys.Subcategory", on_delete=models.CASCADE, db_column="SubcategoryId"
+        Subcategory, on_delete=models.CASCADE, db_column="SubcategoryId"
     )
-    Sample = models.ForeignKey(
-        "samples.Sample", on_delete=models.CASCADE, db_column="SampleId"
-    )
+    Sample = models.ForeignKey(Sample, on_delete=models.CASCADE, db_column="SampleId")
