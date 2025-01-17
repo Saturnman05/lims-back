@@ -25,14 +25,11 @@ class Sample(models.Model):
     is_request = models.BooleanField(default=True, db_column="IsRequest")
 
     # Relaciones muchos a muchos
-    allergens = models.ManyToManyField(
-        "allergens.Allergens", through="allergens.AllergenSample"
-    )
     categorys = models.ManyToManyField(
         "categorys.Category", through="categorys.CategorySample"
     )
-    ingredients = models.ManyToManyField(
-        "ingredients.Ingredient", through="ingredients.SampleIngredient"
+    subcategorys = models.ManyToManyField(
+        "subcategorys.Subcategory", through="subcategorys.SubcategorySample"
     )
 
     def __str__(self):
