@@ -7,7 +7,7 @@ from ..models import Sample
 from ...utils import convert_to_snake_case
 
 
-class SampleSerializer(serializers.ModelSerializer):
+class FileSerializer(serializers.ModelSerializer):
     def to_internal_value(self, data):
         new_data = {}
         for key, value in data.items():
