@@ -38,9 +38,8 @@ INSTALLED_APPS = [
     "drf_spectacular",
     # local
     "api.apps.ApiConfig",
-    "api.samples.allergens",
     "api.samples.categorys",
-    "api.samples.ingredients",
+    "api.samples.files",
     "api.samples",
     "api.users",
 ]
