@@ -4,13 +4,11 @@ from rest_framework import serializers
 
 from .models import Sample
 
-from .allergens.serializers import AllergenSampleSerializer
 from .categorys.serializers import CategorySampleSerializer
-from .ingredients.serializers import SampleIngredientSerializer
+from .subcategorys.serializers import SubcategorySampleSerializer
 
-from .allergens.models import AllergenSample
 from .categorys.models import CategorySample
-from .ingredients.models import SampleIngredient
+from .subcategorys.models import SubcategorySample
 
 from ..utils import convert_to_snake_case
 
@@ -23,9 +21,8 @@ class SampleSerializer(serializers.ModelSerializer):
             new_data[new_key] = value
         return super().to_internal_value(new_data)
 
-    allergens = AllergenSampleSerializer(many=True)
     categorys = CategorySampleSerializer(many=True)
-    ingredients = SampleIngredientSerializer(many=True)
+    subcategorys = SubcategorySampleSerializer(many=True)
     user_id = serializers.PrimaryKeyRelatedField(
         queryset=get_user_model().objects.all()
     )
@@ -46,58 +43,40 @@ class SampleSerializer(serializers.ModelSerializer):
             "temperature",
             "special_conditions",
             "user_id",
-            "allergens",
             "categorys",
-            "ingredients",
+            "subcategorys",
             "is_request",
         ]
 
     def create(self, validated_data):
-        allergens_data = validated_data.pop("allergens")
         categorys_data = validated_data.pop("categorys")
-        ingredients_data = validated_data.pop("ingredients")
+        subcategorys_data = validated_data.pop("subcategorys")
 
         sample = Sample.objects.create(**validated_data)
-
-        for allergen_data in allergens_data:
-            AllergenSample.objects.create(
-                Sample=sample, Allergen=allergen_data["allergen_id"]
-            )
 
         for category_data in categorys_data:
             CategorySample.objects.create(
                 Sample=sample, Category=category_data["category_id"]
             )
 
-        for ingredient_data in ingredients_data:
-            SampleIngredient.objects.create(
-                Sample=sample, Ingredient=ingredient_data["ingredient_id"]
+        for subcategory_data in subcategorys_data:
+            SubcategorySample.objects.create(
+                Sample=sample, Subcategory=subcategory_data["subcategory_id"]
             )
 
         return sample
 
     def update(self, instance, validated_data):
         # Obtener los datos actuales
-        before_allergens_data = instance.allergens.all()
         before_categorys_data = instance.categorys.all()
-        before_ingredients_data = instance.ingredients.all()
+        before_subcategorys_data = instance.subcategorys.all()
 
         # Datos para actualizar
-        allergens_data = validated_data.pop("allergens")
         categorys_data = validated_data.pop("categorys")
-        ingredients_data = validated_data.pop("ingredients")
+        subcategorys_data = validated_data.pop("subcategorys")
 
         # Actualizar el Sample
         instance = super().update(instance, validated_data)
-
-        # UPDATE allergens
-        self.update_relations(
-            instance,
-            before_allergens_data,
-            allergens_data,
-            "allergen_id",
-            AllergenSample,
-        )
 
         # UPDATE categorys
         self.update_relations(
@@ -108,13 +87,12 @@ class SampleSerializer(serializers.ModelSerializer):
             CategorySample,
         )
 
-        # UPDATE ingredients
         self.update_relations(
             instance,
-            before_ingredients_data,
-            ingredients_data,
-            "ingredient_id",
-            SampleIngredient,
+            before_subcategorys_data,
+            subcategorys_data,
+            "subcategory_id",
+            SubcategorySample,
         )
 
         return instance
