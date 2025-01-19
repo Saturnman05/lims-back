@@ -976,8 +976,6 @@ components:
           format: double
         special_conditions:
           type: string
-        user_id:
-          type: integer
         categorys:
           type: array
           items:
@@ -1035,8 +1033,6 @@ components:
           format: double
         special_conditions:
           type: string
-        user_id:
-          type: integer
         categorys:
           type: array
           items:
@@ -1050,18 +1046,14 @@ components:
       required:
       - batch_code
       - categorys
-      - collection_date
       - comercial_name
       - expiration_date
-      - is_rejected
       - origin_country
       - product_brand
       - production_date
       - quantity_units
       - sample_id
       - subcategorys
-      - temperature
-      - user_id
     Subcategory:
       type: object
       properties:
