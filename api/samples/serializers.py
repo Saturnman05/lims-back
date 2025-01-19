@@ -23,9 +23,7 @@ class SampleSerializer(serializers.ModelSerializer):
 
     categorys = CategorySampleSerializer(many=True)
     subcategorys = SubcategorySampleSerializer(many=True)
-    user_id = serializers.PrimaryKeyRelatedField(
-        queryset=get_user_model().objects.all()
-    )
+    # user_id = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all())
 
     class Meta:
         model = Sample
@@ -42,17 +40,35 @@ class SampleSerializer(serializers.ModelSerializer):
             "collection_date",
             "temperature",
             "special_conditions",
-            "user_id",
             "categorys",
             "subcategorys",
             "is_request",
         ]
+        extra_kwargs = {
+            "comercial_name": {"required": True},
+            "product_brand": {"required": True},
+            "batch_code": {"required": True},
+            "production_date": {"required": True},
+            "expiration_date": {"required": True},
+            "quantity_units": {"required": True},
+            "is_rejected": {"required": False},
+            "origin_country": {"required": True},
+            "collection_date": {"required": False},
+            "temperature": {"required": False},
+            "special_conditions": {"required": False},
+            "user_id": {"required": False},
+            "categorys": {"required": True},
+            "subcategorys": {"required": True},
+            "is_request": {"required": False},
+        }
 
     def create(self, validated_data):
+        user_id = self.context["request"].user
+
         categorys_data = validated_data.pop("categorys")
         subcategorys_data = validated_data.pop("subcategorys")
 
-        sample = Sample.objects.create(**validated_data)
+        sample = Sample.objects.create(user_id=user_id, **validated_data)
 
         for category_data in categorys_data:
             CategorySample.objects.create(
