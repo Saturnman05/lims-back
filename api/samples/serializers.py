@@ -23,7 +23,9 @@ class SampleSerializer(serializers.ModelSerializer):
 
     categorys = CategorySampleSerializer(many=True)
     subcategorys = SubcategorySampleSerializer(many=True)
-    # user_id = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all())
+    user_id = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.all()
+    )
 
     class Meta:
         model = Sample
@@ -43,6 +45,7 @@ class SampleSerializer(serializers.ModelSerializer):
             "categorys",
             "subcategorys",
             "is_request",
+            "user_id",
         ]
         extra_kwargs = {
             "comercial_name": {"required": True},
@@ -64,6 +67,7 @@ class SampleSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user_id = self.context["request"].user
+        validated_data.pop("user_id")
 
         categorys_data = validated_data.pop("categorys")
         subcategorys_data = validated_data.pop("subcategorys")
