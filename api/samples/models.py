@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 
+from .files.models import File
+
 
 class Sample(models.Model):
     class Meta:
@@ -23,6 +25,7 @@ class Sample(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, db_column="UserId"
     )
     is_request = models.BooleanField(default=True, db_column="IsRequest")
+    file_id = models.ForeignKey(File, on_delete=models.CASCADE, db_column="FileId")
 
     # Relaciones muchos a muchos
     categorys = models.ManyToManyField(
