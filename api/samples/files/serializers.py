@@ -2,20 +2,19 @@ from rest_framework import serializers
 
 from .models import File
 
-from ..models import Sample
-
 from ...utils import convert_to_snake_case
 
 
 class FileSerializer(serializers.ModelSerializer):
     def to_internal_value(self, data):
+        if type(data) == type([]):
+            data = data[0]
+        print("data ne to_internal_value:", data)
         new_data = {}
         for key, value in data.items():
             new_key = convert_to_snake_case(key)
             new_data[new_key] = value
         return super().to_internal_value(new_data)
-
-    sample_id = serializers.PrimaryKeyRelatedField(queryset=Sample.objects.all())
 
     class Meta:
         model = File
@@ -35,5 +34,4 @@ class FileSerializer(serializers.ModelSerializer):
             "diagrama_flujo",
             "arte_etiqueta",
             "recibo_pago_servicios",
-            "sample_id",
         ]

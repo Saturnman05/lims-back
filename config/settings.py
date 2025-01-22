@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "api.samples.subcategorys",
     "api.samples.files",
     "api.samples",
+    "api.users.roles",
     "api.users",
 ]
 
