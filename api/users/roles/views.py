@@ -58,7 +58,7 @@ def role_list(request):
 
 @api_view(["GET", "DELETE"])
 @permission_classes([IsAuthenticated])
-def role_delete(request, role_id):
+def role_detail(request, role_id):
     if request.method == "GET":
         with connection.cursor() as cursor:
             cursor.execute(
