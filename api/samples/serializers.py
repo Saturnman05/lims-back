@@ -74,6 +74,7 @@ class SampleCreateSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
+        print(validated_data)
         user_id = self.context["request"].user
         validated_data.pop("user_id")
         validated_data.pop("file_id")
