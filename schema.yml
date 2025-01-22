@@ -175,7 +175,6 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/File'
-        required: true
       security:
       - jwtAuth: []
       responses:
@@ -228,7 +227,6 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/File'
-        required: true
       security:
       - jwtAuth: []
       responses:
@@ -285,6 +283,139 @@ paths:
       responses:
         '204':
           description: No response body
+  /api/roles/:
+    get:
+      operationId: api_roles_retrieve
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: api_roles_create
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: api_roles_update
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/roles/{role_id}/:
+    get:
+      operationId: api_roles_retrieve_2
+      parameters:
+      - in: path
+        name: role_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: api_roles_destroy
+      parameters:
+      - in: path
+        name: role_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/roles/user-role/:
+    get:
+      operationId: api_roles_user_role_retrieve
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: api_roles_user_role_create
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: api_roles_user_role_update
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/roles/user-role/{user_id}/:
+    get:
+      operationId: api_roles_user_role_retrieve_2
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: api_roles_user_role_create_2
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: api_roles_user_role_update_2
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
   /api/samples/:
     get:
       operationId: api_samples_list
@@ -300,31 +431,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Sample'
-          description: ''
-    post:
-      operationId: api_samples_create
-      tags:
-      - api
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Sample'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Sample'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Sample'
-        required: true
-      security:
-      - jwtAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Sample'
           description: ''
   /api/samples/{sample_id}/:
     get:
@@ -425,6 +531,42 @@ paths:
       - jwtAuth: []
       responses:
         '204':
+          description: No response body
+  /api/samples/create/:
+    post:
+      operationId: api_samples_create_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SampleCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SampleCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SampleCreate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SampleCreate'
+          description: ''
+  /api/samples/update/:
+    put:
+      operationId: api_samples_update_update
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
           description: No response body
   /api/schema/:
     get:
@@ -874,25 +1016,8 @@ components:
           type: boolean
         recibo_pago_servicios:
           type: boolean
-        sample_id:
-          type: integer
       required:
-      - analisis_original_materiales
-      - analisis_original_producto
-      - arte_etiqueta
-      - certificado_marca
-      - certificado_registro_mercantil
-      - contrato_acondicionamiento
-      - contrato_fabricacion
-      - diagrama_flujo
-      - especificacion_empaque
-      - estudio_estabilidad
       - file_id
-      - listado_ingredientes
-      - permiso_sanitario
-      - poder_representacion
-      - recibo_pago_servicios
-      - sample_id
     PatchedCategory:
       type: object
       properties:
@@ -936,8 +1061,6 @@ components:
           type: boolean
         recibo_pago_servicios:
           type: boolean
-        sample_id:
-          type: integer
     PatchedSample:
       type: object
       properties:
@@ -986,6 +1109,10 @@ components:
             $ref: '#/components/schemas/SubcategorySample'
         is_request:
           type: boolean
+        user_id:
+          type: integer
+        file_id:
+          type: integer
     PatchedSubcategory:
       type: object
       properties:
@@ -1043,17 +1170,93 @@ components:
             $ref: '#/components/schemas/SubcategorySample'
         is_request:
           type: boolean
+        user_id:
+          type: integer
+        file_id:
+          type: integer
       required:
       - batch_code
       - categorys
       - comercial_name
       - expiration_date
+      - file_id
       - origin_country
       - product_brand
       - production_date
       - quantity_units
       - sample_id
       - subcategorys
+      - user_id
+    SampleCreate:
+      type: object
+      properties:
+        sample_id:
+          type: integer
+          readOnly: true
+        comercial_name:
+          type: string
+          maxLength: 255
+        product_brand:
+          type: string
+          maxLength: 255
+        batch_code:
+          type: string
+          maxLength: 255
+        production_date:
+          type: string
+          format: date
+        expiration_date:
+          type: string
+          format: date
+        quantity_units:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        is_rejected:
+          type: boolean
+        origin_country:
+          type: string
+          maxLength: 255
+        collection_date:
+          type: string
+          format: date
+        temperature:
+          type: number
+          format: double
+        special_conditions:
+          type: string
+        categorys:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategorySample'
+        subcategorys:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubcategorySample'
+        is_request:
+          type: boolean
+        user_id:
+          type: integer
+        file_id:
+          type: integer
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+      required:
+      - batch_code
+      - categorys
+      - comercial_name
+      - expiration_date
+      - file_id
+      - files
+      - origin_country
+      - product_brand
+      - production_date
+      - quantity_units
+      - sample_id
+      - subcategorys
+      - user_id
     Subcategory:
       type: object
       properties:
