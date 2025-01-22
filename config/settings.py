@@ -91,7 +91,6 @@ DATABASES = {
         "PORT": os.getenv("PORT"),
         "OPTIONS": {
             "driver": "ODBC Driver 17 for SQL Server",
-            # "extra_params": "Authentication=ActiveDirectoryMsi;Encrypt=yes;TrustServerCertificate=yes",
             "TrustServerCertificate": "yes",
         },
     },
