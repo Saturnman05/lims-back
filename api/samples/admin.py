@@ -1,13 +1,7 @@
 from nested_admin.nested import NestedStackedInline, NestedModelAdmin
 
-from .allergens.models import AllergenSample
 from .categorys.models import CategorySample
-from .ingredients.models import SampleIngredient
-
-
-class AllergenSampleInline(NestedStackedInline):
-    model = AllergenSample
-    extra = 1
+from .subcategorys.models import SubcategorySample
 
 
 class CategorySampleInline(NestedStackedInline):
@@ -15,33 +9,29 @@ class CategorySampleInline(NestedStackedInline):
     extra = 1
 
 
-class SampleIngredientInline(NestedStackedInline):
-    model = SampleIngredient
+class SubcategorySampleInline(NestedStackedInline):
+    model = SubcategorySample
     extra = 1
 
 
 class SampleAdmin(NestedModelAdmin):
+    pk_field = "sample_id"
     list_display = (
         "comercial_name",
         "product_brand",
-        "get_allergens",
         "get_categorys",
-        "get_ingredients",
+        "get_subcategorys",
     )
 
-    inlines = [AllergenSampleInline, CategorySampleInline, SampleIngredientInline]
-
-    def get_allergens(self, obj):
-        return ", ".join([allergen.allergen_name for allergen in obj.allergens.all()])
+    inlines = [CategorySampleInline, SubcategorySampleInline]
 
     def get_categorys(self, obj):
         return ", ".join([category.category_name for category in obj.categorys.all()])
 
-    def get_ingredients(self, obj):
+    def get_subcategorys(self, obj):
         return ", ".join(
-            [ingredient.ingredient_name for ingredient in obj.ingredients.all()]
+            [subcategory.subcategory_name for subcategory in obj.subcategorys.all()]
         )
 
-    get_allergens.short_description = "Alérgenos"
     get_categorys.short_description = "Categorias"
-    get_ingredients.short_description = "Categorias"
+    get_subcategorys.short_description = "Subcategorias"

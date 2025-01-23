@@ -38,11 +38,13 @@ INSTALLED_APPS = [
     "drf_spectacular",
     # local
     "api.apps.ApiConfig",
-    "api.samples.allergens",
     "api.samples.categorys",
-    "api.samples.ingredients",
+    "api.samples.subcategorys",
+    "api.samples.files",
     "api.samples",
+    "api.users.roles",
     "api.users",
+    "api.bulletin",
 ]
 
 MIDDLEWARE = [
@@ -90,23 +92,6 @@ DATABASES = {
         "PORT": "",
         "OPTIONS": {
             "driver": "ODBC Driver 17 for SQL Server",
-            # "extra_params": "Authentication=ActiveDirectoryMsi;Encrypt=yes;TrustServerCertificate=yes",
-            "TrustServerCertificate": "yes",
-        },
-        "TEST": {
-            "NAME": os.getenv("TEST_DB_NAME"),
-        },
-    },
-    "test": {
-        "ENGINE": os.getenv("ENGINE"),
-        "NAME": os.getenv("TEST_DB_NAME"),
-        "USER": os.getenv("USER"),
-        "PASSWORD": os.getenv("PASSWORD"),
-        "HOST": os.getenv("HOST"),
-        "PORT": os.getenv("PORT"),
-        "OPTIONS": {
-            "driver": "ODBC Driver 17 for SQL Server",
-            # "extra_params": "Authentication=ActiveDirectoryMsi;Encrypt=yes;TrustServerCertificate=yes",
             "TrustServerCertificate": "yes",
         },
     },
