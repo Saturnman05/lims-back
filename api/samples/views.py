@@ -1,3 +1,4 @@
+import traceback
 from django.http import JsonResponse
 from django.db import connection
 
@@ -74,6 +75,135 @@ def sample_update(request):
     ][0]
     return JsonResponse(data, safe=False)
 
+@api_view(["GET", "POST", "PUT", "DELETE"])
+@permission_classes([IsAuthenticated])
+def sample_assignment(request, sample_id=None):
+    """
+    Handle Sample Assignment operations:
+    GET: Retrieve assignment
+    POST: Create new assignment
+    PUT: Update assignment
+    DELETE: Delete assignment
+    """
+    try:
+        if request.method == "GET":
+            if sample_id is None:
+                return JsonResponse(
+                    {"error": "SampleId is required"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            try:
+                with connection.cursor() as cursor:
+                    # Use direct SQL instead of stored procedure to debug
+                    cursor.execute(
+                        "SELECT * FROM Assignment WHERE SampleId = %s",
+                        [sample_id]
+                    )
+                    rows = cursor.fetchall()
+                
+                if not rows:
+                    return JsonResponse(
+                        {"message": "No assignment found"},
+                        status=status.HTTP_404_NOT_FOUND
+                    )
+                
+                data = [
+                    {
+                        "assignment_id": row[0],
+                        "assignment_date": row[1],
+                        "sample_id": row[2],
+                        "analyst_id": row[3],
+                        "manager_id": row[4],
+                    }
+                    for row in rows
+                ]
+                return JsonResponse(data[0] if data else {}, safe=False)
+            
+            except Exception as db_error:
+                return JsonResponse(
+                    {
+                        "error": str(db_error),
+                        "traceback": traceback.format_exc()
+                    },
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+        
+        elif request.method == "POST":
+            # Create new assignment
+            sample_id = request.data.get('sampleId')
+            analyst_id = request.data.get('analystId')
+            manager_id = request.data.get('managerId')
+            
+            if not all([sample_id, analyst_id, manager_id]):
+                return JsonResponse(
+                    {"error": "SampleId, AnalystId, and ManagerId are required"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "EXEC ManageSampleAssignment @SampleId=?, @AnalystId=?, @ManagerId=?, @Operation=?",
+                    [sample_id, analyst_id, manager_id, 4]
+                )
+            
+            return JsonResponse(
+                {"message": "Assignment created successfully"},
+                status=status.HTTP_201_CREATED
+            )
+        
+        elif request.method == "PUT":
+            # Update existing assignment
+            if sample_id is None:
+                sample_id = request.data.get('sampleId')
+            
+            analyst_id = request.data.get('analystId')
+            manager_id = request.data.get('managerId')
+            
+            if not all([sample_id, analyst_id, manager_id]):
+                return JsonResponse(
+                    {"error": "SampleId, AnalystId, and ManagerId are required"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "EXEC ManageSampleAssignment @SampleId=?, @AnalystId=?, @ManagerId=?, @Operation=?",
+                    [sample_id, analyst_id, manager_id, 2]
+                )
+            
+            return JsonResponse(
+                {"message": "Assignment updated successfully"},
+                status=status.HTTP_200_OK
+            )
+        
+        elif request.method == "DELETE":
+            # Delete assignment
+            if sample_id is None:
+                sample_id = request.data.get('sampleId')
+            
+            if sample_id is None:
+                return JsonResponse(
+                    {"error": "SampleId is required"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    "EXEC ManageSampleAssignment @SampleId=?, @AnalystId=NULL, @ManagerId=NULL, @Operation=?",
+                    [sample_id, 3]
+                )
+            
+            return JsonResponse(
+                {"message": "Assignment deleted successfully"},
+                status=status.HTTP_200_OK
+            )
+    
+    except Exception as e:
+        return JsonResponse(
+            {"error": str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 class SampleCreate(generics.CreateAPIView):
     queryset = Sample.objects.all()
