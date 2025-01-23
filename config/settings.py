@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "api.samples",
     "api.users.roles",
     "api.users",
+    "api.bulletin",
 ]
 
 MIDDLEWARE = [
