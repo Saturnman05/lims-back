@@ -7,6 +7,7 @@ from .views import (
     filtered_get,
 )
 
+
 urlpatterns = [
     path("register/", CreatUserView.as_view(), name="register"),
     path("details/", UserDetailView.as_view(), name="user-details"),
