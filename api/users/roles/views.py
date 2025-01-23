@@ -58,7 +58,7 @@ def role_list(request):
 
 @api_view(["GET", "DELETE"])
 @permission_classes([IsAuthenticated])
-def role_delete(request, role_id):
+def role_detail(request, role_id):
     if request.method == "GET":
         with connection.cursor() as cursor:
             cursor.execute(
@@ -83,3 +83,43 @@ def role_delete(request, role_id):
                 [role_id],
             )
         return JsonResponse({"message": f"Se eleminó el rol {role_id} exitosamente"})
+
+
+@api_view(["GET", "POST", "PUT"])
+@permission_classes([IsAuthenticated])
+def user_role(request, user_id=None):
+    if request.method == "GET":
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "EXEC spEmployeeRoles @NewRoleId=null, @RoleId=null, @EmployeeId=%s, @Procedure=1",
+                [user_id],
+            )
+            rows = cursor.fetchall()
+        data = [
+            {
+                "role_id": row[0],
+                "role_name": row[1],
+                "role_description": row[2],
+                "user_id": row[3],
+            }
+            for row in rows
+        ]
+        return JsonResponse(data, safe=False)
+    elif request.method == "POST":
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "EXEC spEmployeeRoles @NewRoleId=null, @RoleId=%s, @EmployeeId=%s, @Procedure=2",
+                [request.data.get("roleId"), request.data.get("userId")],
+            )
+        return JsonResponse({"message": "Se le añadió un rol al usuario exitosamente"})
+    elif request.method == "PUT":
+        with connection.cursor() as cursor:
+            cursor.execute(
+                "EXEC spEmployeeRoles @NewRoleId=%s, @RoleId=%s, @EmployeeId=%s, @Procedure=3",
+                [
+                    request.data.get("newRoleId"),
+                    request.data.get("roleId"),
+                    request.data.get("userId"),
+                ],
+            )
+        return JsonResponse({"message": "Se actualizó el rol del usuario exitosamente"})
