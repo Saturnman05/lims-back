@@ -111,9 +111,12 @@ def filtered_get(
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def get_users_with_roles(request, include_users):
+def get_users_with_roles(request, include_users, company_name=None):
     with connection.cursor() as cursor:
-        cursor.execute("EXEC spGetUsersByRole @IncludeUsers=%s", [bool(include_users)])
+        cursor.execute(
+            "EXEC spGetUsersByRole @IncludeUsers=%s, @CompanyName=%s",
+            [bool(include_users), company_name],
+        )
         rows = cursor.fetchall()
     data = [
         {

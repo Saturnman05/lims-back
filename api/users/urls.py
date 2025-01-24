@@ -16,5 +16,6 @@ urlpatterns = [
     path("filter/is-active/<int:active>/", filtered_get),
     path("filter/<int:role_id>/<int:active>/", filtered_get),
     path("with-role/<int:include_users>/", get_users_with_roles),
+    path("with-role/<int:include_users>/<int:company_name>", get_users_with_roles),
     path("", UserListView.as_view(), name="user-list"),
 ]
