@@ -1,21 +1,22 @@
 from django.contrib.auth import get_user_model
 
-from rest_framework import serializers
+from rest_framework import serializers, status
+from rest_framework.response import Response
 
 from .models import Sample
 
-from .allergens.serializers import AllergenSampleSerializer
 from .categorys.serializers import CategorySampleSerializer
-from .ingredients.serializers import SampleIngredientSerializer
+from .subcategorys.serializers import SubcategorySampleSerializer
+from .files.serializers import FileSerializer
 
-from .allergens.models import AllergenSample
 from .categorys.models import CategorySample
-from .ingredients.models import SampleIngredient
+from .subcategorys.models import SubcategorySample
+from .files.models import File
 
 from ..utils import convert_to_snake_case
 
 
-class SampleSerializer(serializers.ModelSerializer):
+class SampleCreateSerializer(serializers.ModelSerializer):
     def to_internal_value(self, data):
         new_data = {}
         for key, value in data.items():
@@ -23,12 +24,13 @@ class SampleSerializer(serializers.ModelSerializer):
             new_data[new_key] = value
         return super().to_internal_value(new_data)
 
-    allergens = AllergenSampleSerializer(many=True)
     categorys = CategorySampleSerializer(many=True)
-    ingredients = SampleIngredientSerializer(many=True)
+    subcategorys = SubcategorySampleSerializer(many=True)
     user_id = serializers.PrimaryKeyRelatedField(
         queryset=get_user_model().objects.all()
     )
+    file_id = serializers.PrimaryKeyRelatedField(queryset=File.objects.all())
+    files = FileSerializer(many=True)
 
     class Meta:
         model = Sample
@@ -45,59 +47,130 @@ class SampleSerializer(serializers.ModelSerializer):
             "collection_date",
             "temperature",
             "special_conditions",
-            "user_id",
-            "allergens",
             "categorys",
-            "ingredients",
+            "subcategorys",
             "is_request",
+            "user_id",
+            "file_id",
+            "files",
         ]
+        extra_kwargs = {
+            "comercial_name": {"required": True},
+            "product_brand": {"required": True},
+            "batch_code": {"required": True},
+            "production_date": {"required": True},
+            "expiration_date": {"required": True},
+            "quantity_units": {"required": True},
+            "is_rejected": {"required": False},
+            "origin_country": {"required": True},
+            "collection_date": {"required": False},
+            "temperature": {"required": False},
+            "special_conditions": {"required": False},
+            "user_id": {"required": False},
+            "categorys": {"required": True},
+            "subcategorys": {"required": True},
+            "is_request": {"required": False},
+            "file_id": {"required": False},
+        }
 
     def create(self, validated_data):
-        allergens_data = validated_data.pop("allergens")
+        print(validated_data)
+        user_id = self.context["request"].user
+        validated_data.pop("user_id")
+        validated_data.pop("file_id")
+
         categorys_data = validated_data.pop("categorys")
-        ingredients_data = validated_data.pop("ingredients")
+        subcategorys_data = validated_data.pop("subcategorys")
+        files_data = validated_data.pop("files", None)
+        file_instance = None
+        if files_data:
+            file_serializer = FileSerializer(data=files_data)
+            file_serializer.is_valid(raise_exception=True)
+            file_instance = file_serializer.save()
 
-        sample = Sample.objects.create(**validated_data)
-
-        for allergen_data in allergens_data:
-            AllergenSample.objects.create(
-                Sample=sample, Allergen=allergen_data["allergen_id"]
-            )
+        sample = Sample.objects.create(
+            user_id=user_id, file_id=file_instance, **validated_data
+        )
 
         for category_data in categorys_data:
             CategorySample.objects.create(
                 Sample=sample, Category=category_data["category_id"]
             )
 
-        for ingredient_data in ingredients_data:
-            SampleIngredient.objects.create(
-                Sample=sample, Ingredient=ingredient_data["ingredient_id"]
+        for subcategory_data in subcategorys_data:
+            SubcategorySample.objects.create(
+                Sample=sample, Subcategory=subcategory_data["subcategory_id"]
             )
-
+        sample.files = []
         return sample
+
+
+class SampleSerializer(serializers.ModelSerializer):
+    def to_internal_value(self, data):
+        new_data = {}
+        for key, value in data.items():
+            new_key = convert_to_snake_case(key)
+            new_data[new_key] = value
+        return super().to_internal_value(new_data)
+
+    categorys = CategorySampleSerializer(many=True)
+    subcategorys = SubcategorySampleSerializer(many=True)
+    user_id = serializers.PrimaryKeyRelatedField(
+        queryset=get_user_model().objects.all()
+    )
+    file_id = serializers.PrimaryKeyRelatedField(queryset=File.objects.all())
+
+    class Meta:
+        model = Sample
+        fields = [
+            "sample_id",
+            "comercial_name",
+            "product_brand",
+            "batch_code",
+            "production_date",
+            "expiration_date",
+            "quantity_units",
+            "is_rejected",
+            "origin_country",
+            "collection_date",
+            "temperature",
+            "special_conditions",
+            "categorys",
+            "subcategorys",
+            "is_request",
+            "user_id",
+            "file_id",
+        ]
+        extra_kwargs = {
+            "comercial_name": {"required": True},
+            "product_brand": {"required": True},
+            "batch_code": {"required": True},
+            "production_date": {"required": True},
+            "expiration_date": {"required": True},
+            "quantity_units": {"required": True},
+            "is_rejected": {"required": False},
+            "origin_country": {"required": True},
+            "collection_date": {"required": False},
+            "temperature": {"required": False},
+            "special_conditions": {"required": False},
+            "user_id": {"required": False},
+            "categorys": {"required": True},
+            "subcategorys": {"required": True},
+            "is_request": {"required": False},
+            "file_id": {"required": False},
+        }
 
     def update(self, instance, validated_data):
         # Obtener los datos actuales
-        before_allergens_data = instance.allergens.all()
         before_categorys_data = instance.categorys.all()
-        before_ingredients_data = instance.ingredients.all()
+        before_subcategorys_data = instance.subcategorys.all()
 
         # Datos para actualizar
-        allergens_data = validated_data.pop("allergens")
         categorys_data = validated_data.pop("categorys")
-        ingredients_data = validated_data.pop("ingredients")
+        subcategorys_data = validated_data.pop("subcategorys")
 
         # Actualizar el Sample
         instance = super().update(instance, validated_data)
-
-        # UPDATE allergens
-        self.update_relations(
-            instance,
-            before_allergens_data,
-            allergens_data,
-            "allergen_id",
-            AllergenSample,
-        )
 
         # UPDATE categorys
         self.update_relations(
@@ -108,13 +181,12 @@ class SampleSerializer(serializers.ModelSerializer):
             CategorySample,
         )
 
-        # UPDATE ingredients
         self.update_relations(
             instance,
-            before_ingredients_data,
-            ingredients_data,
-            "ingredient_id",
-            SampleIngredient,
+            before_subcategorys_data,
+            subcategorys_data,
+            "subcategory_id",
+            SubcategorySample,
         )
 
         return instance

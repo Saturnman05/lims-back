@@ -4,146 +4,6 @@ info:
   version: 1.0.0
   description: LIMS backend
 paths:
-  /api/allergens/:
-    get:
-      operationId: api_allergens_list
-      tags:
-      - api
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Allergen'
-          description: ''
-  /api/allergens/{allergen_id}/:
-    get:
-      operationId: api_allergens_retrieve
-      parameters:
-      - in: path
-        name: allergen_id
-        schema:
-          type: integer
-        description: A unique integer value identifying this allergens.
-        required: true
-      tags:
-      - api
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Allergen'
-          description: ''
-    put:
-      operationId: api_allergens_update
-      parameters:
-      - in: path
-        name: allergen_id
-        schema:
-          type: integer
-        description: A unique integer value identifying this allergens.
-        required: true
-      tags:
-      - api
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Allergen'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Allergen'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Allergen'
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Allergen'
-          description: ''
-    patch:
-      operationId: api_allergens_partial_update
-      parameters:
-      - in: path
-        name: allergen_id
-        schema:
-          type: integer
-        description: A unique integer value identifying this allergens.
-        required: true
-      tags:
-      - api
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PatchedAllergen'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/PatchedAllergen'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/PatchedAllergen'
-      security:
-      - jwtAuth: []
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Allergen'
-          description: ''
-    delete:
-      operationId: api_allergens_destroy
-      parameters:
-      - in: path
-        name: allergen_id
-        schema:
-          type: integer
-        description: A unique integer value identifying this allergens.
-        required: true
-      tags:
-      - api
-      security:
-      - jwtAuth: []
-      responses:
-        '204':
-          description: No response body
-  /api/allergens/create/:
-    post:
-      operationId: api_allergens_create_create
-      tags:
-      - api
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Allergen'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Allergen'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Allergen'
-      security:
-      - jwtAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Allergen'
-          description: ''
   /api/categorys/:
     get:
       operationId: api_categorys_list
@@ -284,9 +144,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/Category'
           description: ''
-  /api/ingredients/:
+  /api/files/:
     get:
-      operationId: api_ingredients_list
+      operationId: api_files_list
       tags:
       - api
       security:
@@ -298,17 +158,41 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Ingredient'
+                  $ref: '#/components/schemas/File'
           description: ''
-  /api/ingredients/{ingredient_id}/:
+    post:
+      operationId: api_files_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/File'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/File'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/File'
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+          description: ''
+  /api/files/{file_id}/:
     get:
-      operationId: api_ingredients_retrieve
+      operationId: api_files_retrieve
       parameters:
       - in: path
-        name: ingredient_id
+        name: file_id
         schema:
           type: integer
-        description: A unique integer value identifying this ingredient.
+        description: A unique integer value identifying this file.
         required: true
       tags:
       - api
@@ -319,16 +203,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Ingredient'
+                $ref: '#/components/schemas/File'
           description: ''
     put:
-      operationId: api_ingredients_update
+      operationId: api_files_update
       parameters:
       - in: path
-        name: ingredient_id
+        name: file_id
         schema:
           type: integer
-        description: A unique integer value identifying this ingredient.
+        description: A unique integer value identifying this file.
         required: true
       tags:
       - api
@@ -336,13 +220,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Ingredient'
+              $ref: '#/components/schemas/File'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/Ingredient'
+              $ref: '#/components/schemas/File'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/Ingredient'
+              $ref: '#/components/schemas/File'
       security:
       - jwtAuth: []
       responses:
@@ -350,16 +234,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Ingredient'
+                $ref: '#/components/schemas/File'
           description: ''
     patch:
-      operationId: api_ingredients_partial_update
+      operationId: api_files_partial_update
       parameters:
       - in: path
-        name: ingredient_id
+        name: file_id
         schema:
           type: integer
-        description: A unique integer value identifying this ingredient.
+        description: A unique integer value identifying this file.
         required: true
       tags:
       - api
@@ -367,13 +251,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatchedIngredient'
+              $ref: '#/components/schemas/PatchedFile'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/PatchedIngredient'
+              $ref: '#/components/schemas/PatchedFile'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/PatchedIngredient'
+              $ref: '#/components/schemas/PatchedFile'
       security:
       - jwtAuth: []
       responses:
@@ -381,16 +265,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Ingredient'
+                $ref: '#/components/schemas/File'
           description: ''
     delete:
-      operationId: api_ingredients_destroy
+      operationId: api_files_destroy
       parameters:
       - in: path
-        name: ingredient_id
+        name: file_id
         schema:
           type: integer
-        description: A unique integer value identifying this ingredient.
+        description: A unique integer value identifying this file.
         required: true
       tags:
       - api
@@ -399,31 +283,139 @@ paths:
       responses:
         '204':
           description: No response body
-  /api/ingredients/create/:
-    post:
-      operationId: api_ingredients_create_create
+  /api/roles/:
+    get:
+      operationId: api_roles_retrieve
       tags:
       - api
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Ingredient'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Ingredient'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Ingredient'
       security:
       - jwtAuth: []
       responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Ingredient'
-          description: ''
+        '200':
+          description: No response body
+    post:
+      operationId: api_roles_create
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: api_roles_update
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/roles/{role_id}/:
+    get:
+      operationId: api_roles_retrieve_2
+      parameters:
+      - in: path
+        name: role_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    delete:
+      operationId: api_roles_destroy
+      parameters:
+      - in: path
+        name: role_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/roles/user-role/:
+    get:
+      operationId: api_roles_user_role_retrieve
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: api_roles_user_role_create
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: api_roles_user_role_update
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/roles/user-role/{user_id}/:
+    get:
+      operationId: api_roles_user_role_retrieve_2
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: api_roles_user_role_create_2
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: api_roles_user_role_update_2
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          description: No response body
   /api/samples/:
     get:
       operationId: api_samples_list
@@ -439,31 +431,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Sample'
-          description: ''
-    post:
-      operationId: api_samples_create
-      tags:
-      - api
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Sample'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Sample'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Sample'
-        required: true
-      security:
-      - jwtAuth: []
-      responses:
-        '201':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Sample'
           description: ''
   /api/samples/{sample_id}/:
     get:
@@ -564,6 +531,42 @@ paths:
       - jwtAuth: []
       responses:
         '204':
+          description: No response body
+  /api/samples/create/:
+    post:
+      operationId: api_samples_create_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SampleCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SampleCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SampleCreate'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SampleCreate'
+          description: ''
+  /api/samples/update/:
+    put:
+      operationId: api_samples_update_update
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
           description: No response body
   /api/schema/:
     get:
@@ -710,6 +713,145 @@ paths:
                 type: object
                 additionalProperties: {}
           description: ''
+  /api/subcategorys/:
+    get:
+      operationId: api_subcategorys_list
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subcategory'
+          description: ''
+    post:
+      operationId: api_subcategorys_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subcategory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Subcategory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Subcategory'
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcategory'
+          description: ''
+  /api/subcategorys/{subcategory_id}/:
+    get:
+      operationId: api_subcategorys_retrieve
+      parameters:
+      - in: path
+        name: subcategory_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this subcategory.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcategory'
+          description: ''
+    put:
+      operationId: api_subcategorys_update
+      parameters:
+      - in: path
+        name: subcategory_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this subcategory.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Subcategory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Subcategory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Subcategory'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcategory'
+          description: ''
+    patch:
+      operationId: api_subcategorys_partial_update
+      parameters:
+      - in: path
+        name: subcategory_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this subcategory.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSubcategory'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSubcategory'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSubcategory'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subcategory'
+          description: ''
+    delete:
+      operationId: api_subcategorys_destroy
+      parameters:
+      - in: path
+        name: subcategory_id
+        schema:
+          type: integer
+        description: A unique integer value identifying this subcategory.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
   /api/token/:
     post:
       operationId: api_token_create
@@ -822,24 +964,6 @@ paths:
           description: ''
 components:
   schemas:
-    Allergen:
-      type: object
-      properties:
-        allergen_id:
-          type: integer
-          readOnly: true
-        allergen_name:
-          type: string
-          maxLength: 255
-      required:
-      - allergen_id
-    AllergenSample:
-      type: object
-      properties:
-        allergen_id:
-          type: integer
-      required:
-      - allergen_id
     Category:
       type: object
       properties:
@@ -858,26 +982,42 @@ components:
           type: integer
       required:
       - category_id
-    Ingredient:
+    File:
       type: object
       properties:
-        ingredient_id:
+        file_id:
           type: integer
           readOnly: true
-        ingredient_name:
-          type: string
-          maxLength: 255
+        certificado_registro_mercantil:
+          type: boolean
+        poder_representacion:
+          type: boolean
+        certificado_marca:
+          type: boolean
+        permiso_sanitario:
+          type: boolean
+        contrato_fabricacion:
+          type: boolean
+        contrato_acondicionamiento:
+          type: boolean
+        listado_ingredientes:
+          type: boolean
+        analisis_original_producto:
+          type: boolean
+        analisis_original_materiales:
+          type: boolean
+        estudio_estabilidad:
+          type: boolean
+        especificacion_empaque:
+          type: boolean
+        diagrama_flujo:
+          type: boolean
+        arte_etiqueta:
+          type: boolean
+        recibo_pago_servicios:
+          type: boolean
       required:
-      - ingredient_id
-    PatchedAllergen:
-      type: object
-      properties:
-        allergen_id:
-          type: integer
-          readOnly: true
-        allergen_name:
-          type: string
-          maxLength: 255
+      - file_id
     PatchedCategory:
       type: object
       properties:
@@ -887,15 +1027,40 @@ components:
         category_name:
           type: string
           maxLength: 255
-    PatchedIngredient:
+    PatchedFile:
       type: object
       properties:
-        ingredient_id:
+        file_id:
           type: integer
           readOnly: true
-        ingredient_name:
-          type: string
-          maxLength: 255
+        certificado_registro_mercantil:
+          type: boolean
+        poder_representacion:
+          type: boolean
+        certificado_marca:
+          type: boolean
+        permiso_sanitario:
+          type: boolean
+        contrato_fabricacion:
+          type: boolean
+        contrato_acondicionamiento:
+          type: boolean
+        listado_ingredientes:
+          type: boolean
+        analisis_original_producto:
+          type: boolean
+        analisis_original_materiales:
+          type: boolean
+        estudio_estabilidad:
+          type: boolean
+        especificacion_empaque:
+          type: boolean
+        diagrama_flujo:
+          type: boolean
+        arte_etiqueta:
+          type: boolean
+        recibo_pago_servicios:
+          type: boolean
     PatchedSample:
       type: object
       properties:
@@ -934,22 +1099,29 @@ components:
           format: double
         special_conditions:
           type: string
-        user_id:
-          type: integer
-        allergens:
-          type: array
-          items:
-            $ref: '#/components/schemas/AllergenSample'
         categorys:
           type: array
           items:
             $ref: '#/components/schemas/CategorySample'
-        ingredients:
+        subcategorys:
           type: array
           items:
-            $ref: '#/components/schemas/SampleIngredient'
+            $ref: '#/components/schemas/SubcategorySample'
         is_request:
           type: boolean
+        user_id:
+          type: integer
+        file_id:
+          type: integer
+    PatchedSubcategory:
+      type: object
+      properties:
+        subcategory_id:
+          type: integer
+          readOnly: true
+        subcategory_name:
+          type: string
+          maxLength: 255
     Sample:
       type: object
       properties:
@@ -988,45 +1160,121 @@ components:
           format: double
         special_conditions:
           type: string
-        user_id:
-          type: integer
-        allergens:
-          type: array
-          items:
-            $ref: '#/components/schemas/AllergenSample'
         categorys:
           type: array
           items:
             $ref: '#/components/schemas/CategorySample'
-        ingredients:
+        subcategorys:
           type: array
           items:
-            $ref: '#/components/schemas/SampleIngredient'
+            $ref: '#/components/schemas/SubcategorySample'
         is_request:
           type: boolean
+        user_id:
+          type: integer
+        file_id:
+          type: integer
       required:
-      - allergens
       - batch_code
       - categorys
-      - collection_date
       - comercial_name
       - expiration_date
-      - ingredients
-      - is_rejected
+      - file_id
       - origin_country
       - product_brand
       - production_date
       - quantity_units
       - sample_id
-      - temperature
+      - subcategorys
       - user_id
-    SampleIngredient:
+    SampleCreate:
       type: object
       properties:
-        ingredient_id:
+        sample_id:
+          type: integer
+          readOnly: true
+        comercial_name:
+          type: string
+          maxLength: 255
+        product_brand:
+          type: string
+          maxLength: 255
+        batch_code:
+          type: string
+          maxLength: 255
+        production_date:
+          type: string
+          format: date
+        expiration_date:
+          type: string
+          format: date
+        quantity_units:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        is_rejected:
+          type: boolean
+        origin_country:
+          type: string
+          maxLength: 255
+        collection_date:
+          type: string
+          format: date
+        temperature:
+          type: number
+          format: double
+        special_conditions:
+          type: string
+        categorys:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategorySample'
+        subcategorys:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubcategorySample'
+        is_request:
+          type: boolean
+        user_id:
+          type: integer
+        file_id:
+          type: integer
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+      required:
+      - batch_code
+      - categorys
+      - comercial_name
+      - expiration_date
+      - file_id
+      - files
+      - origin_country
+      - product_brand
+      - production_date
+      - quantity_units
+      - sample_id
+      - subcategorys
+      - user_id
+    Subcategory:
+      type: object
+      properties:
+        subcategory_id:
+          type: integer
+          readOnly: true
+        subcategory_name:
+          type: string
+          maxLength: 255
+      required:
+      - subcategory_id
+    SubcategorySample:
+      type: object
+      properties:
+        subcategory_id:
           type: integer
       required:
-      - ingredient_id
+      - subcategory_id
     TokenObtainPair:
       type: object
       properties:
