@@ -107,3 +107,35 @@ def filtered_get(
         for row in rows
     ]
     return JsonResponse(data, safe=False)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_users_with_roles(request, include_users, company_name=None):
+    with connection.cursor() as cursor:
+        cursor.execute(
+            "EXEC spGetUsersByRole @IncludeUsers=%s, @CompanyName=%s",
+            [bool(include_users), company_name],
+        )
+        rows = cursor.fetchall()
+    data = [
+        {
+            "user_id": row[0],
+            "full_name": row[1],
+            "username": row[2],
+            "cedula": row[4],
+            "email": row[5],
+            "phone": row[6],
+            "active": row[7],
+            "rnc": row[8],
+            "comercial_company_name": row[9],
+            "company_name": row[10],
+            "is_master": row[11],
+            "date_joined": row[18],
+            "role_id": row[19],
+            "role_name": row[20],
+            "role_description": row[21],
+        }
+        for row in rows
+    ]
+    return JsonResponse(data, safe=False)
