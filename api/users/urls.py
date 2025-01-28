@@ -8,6 +8,7 @@ from .views import (
     get_users_with_roles,
 )
 
+
 urlpatterns = [
     path("register/", CreatUserView.as_view(), name="register"),
     path("details/", UserDetailView.as_view(), name="user-details"),
